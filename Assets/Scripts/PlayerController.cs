@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -7,6 +8,16 @@ public class PlayerController : MonoBehaviour
     {
         rb.AddForce(0, 0, 2000 * Time.deltaTime);
         score = 0;
+        health = 5;
+        scene = SceneManager.GetActiveScene();
+    }
+    void Update()
+    {
+        if (health == 0)
+        {
+            Debug.Log("Game Over!");
+            SceneManager.LoadScene(scene.name, LoadSceneMode.Single);
+        }
     }
 
     // Update is called once per frame
@@ -44,9 +55,20 @@ public class PlayerController : MonoBehaviour
             score = score + 1;
             Debug.Log("Score: " + score);
         }
+        if (other.gameObject.tag == "Trap")
+        {
+            health -= 1;
+            Debug.Log("Health:" + health);
+        }
+        if (other.gameObject.tag == "Goal")
+        {
+            Debug.Log("You win!");
+        }
     }
 
     public Rigidbody rb;
     public float speed;
     private int score;
+    public int health;
+    private Scene scene;
 }
